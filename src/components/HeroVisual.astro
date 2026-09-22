@@ -1,0 +1,357 @@
+---
+import Icon from './Icon.astro';
+
+// Code-crafted 3D dashboard mockup — honest abstract "growth console"
+// visual (no fake client screenshots). Tilts in 3D on pointer, counts up
+// KPIs on first view. Decorative only: aria-hidden.
+---
+<div class="hero-visual" data-tilt aria-hidden="true">
+  <div class="orb orb--lime"></div>
+  <div class="orb orb--cyan"></div>
+  <div class="orb-ring"></div>
+
+  <div class="dash glass" data-tilt-inner>
+    <div class="dash-glare"></div>
+    <div class="dash-top">
+      <span class="dash-dot"></span>
+      <span class="dash-url">growth.console — sample view</span>
+      <span class="live-badge"><span class="live-dot"></span>SAMPLE</span>
+    </div>
+
+    <div class="dash-hero-num">
+      <span class="dash-label">Avg. client ROI uplift</span>
+      <span class="dash-big">+<span data-count="214">0</span>%</span>
+    </div>
+
+    <svg class="spark" viewBox="0 0 320 110" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#c8ff2e" stop-opacity="0.35" />
+          <stop offset="1" stop-color="#c8ff2e" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M0,92 C30,88 45,70 65,72 C85,74 95,50 120,52 C145,54 150,66 175,58 C200,50 210,28 240,30 C270,32 290,14 320,10 L320,110 L0,110 Z" fill="url(#sparkFill)" />
+      <path d="M0,92 C30,88 45,70 65,72 C85,74 95,50 120,52 C145,54 150,66 175,58 C200,50 210,28 240,30 C270,32 290,14 320,10" fill="none" stroke="#c8ff2e" stroke-width="3" stroke-linecap="round" />
+      <path d="M0,100 C40,98 70,90 110,88 C150,86 200,76 250,70 C280,67 300,64 320,62" fill="none" stroke="#3ec6e0" stroke-width="2" stroke-dasharray="5 5" opacity="0.8" />
+      <circle cx="320" cy="10" r="5" fill="#c8ff2e" />
+    </svg>
+
+    <div class="dash-bars" aria-hidden="true">
+      <span style="--h: 34%"></span><span style="--h: 48%"></span><span style="--h: 40%"></span><span style="--h: 58%"></span><span style="--h: 52%"></span><span style="--h: 66%"></span><span style="--h: 60%"></span><span style="--h: 74%"></span><span style="--h: 70%"></span><span style="--h: 84%"></span><span style="--h: 92%"></span><span style="--h: 100%"></span>
+    </div>
+
+    <div class="dash-kpis">
+      <div class="kpi"><span class="kpi-num">+38k</span><span class="kpi-label">Followers</span></div>
+      <div class="kpi"><span class="kpi-num">−42%</span><span class="kpi-label">Cost / lead</span></div>
+      <div class="kpi"><span class="kpi-num">4.8x</span><span class="kpi-label">ROAS</span></div>
+    </div>
+  </div>
+
+  <div class="float-chip chip-a glass">
+    <Icon name="trending-up" size={18} />
+    <span><strong>4.8x</strong> ROAS on Meta ads</span>
+  </div>
+  <div class="float-chip chip-b glass">
+    <Icon name="users" size={18} />
+    <span><strong>+38k</strong> new followers</span>
+  </div>
+  <div class="float-chip chip-c glass">
+    <span class="live-dot"></span>
+    <span><strong>Sample</strong> dashboard data</span>
+  </div>
+  <!-- NOTE: all dashboard figures are illustrative placeholders (see NOTES.md).
+       Replace with real anonymized client metrics when available. -->
+</div>
+
+<script>
+  // 3D tilt + cursor glare (fine pointers only) and KPI count-up on view
+  const wrap = document.querySelector('[data-tilt]');
+  const inner = document.querySelector('[data-tilt-inner]');
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (wrap && inner && fine && !calm) {
+    const el = inner as HTMLElement;
+    wrap.addEventListener('mousemove', (e) => {
+      const r = (wrap as HTMLElement).getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `rotateX(${(-py * 10).toFixed(2)}deg) rotateY(${(px * 12).toFixed(2)}deg)`;
+      el.style.setProperty('--mx', `${((px + 0.5) * 100).toFixed(1)}%`);
+      el.style.setProperty('--my', `${((py + 0.5) * 100).toFixed(1)}%`);
+    });
+    wrap.addEventListener('mouseleave', () => {
+      el.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  }
+
+  const counters = document.querySelectorAll('[data-count]');
+  const run = (node: Element) => {
+    const target = Number((node as HTMLElement).dataset.count || '0');
+    if (calm) {
+      node.textContent = String(target);
+      return;
+    }
+    const t0 = performance.now();
+    const dur = 1400;
+    const tick = (t: number) => {
+      const p = Math.min((t - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      node.textContent = String(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  if ('IntersectionObserver' in window && !calm) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            run(en.target);
+            io.unobserve(en.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    counters.forEach((c) => io.observe(c));
+  } else {
+    counters.forEach(run);
+  }
+</script>
+
+<style>
+  .hero-visual {
+    position: relative;
+    perspective: 1200px;
+    min-height: 520px;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+  }
+  .orb--lime {
+    width: 340px;
+    height: 340px;
+    top: -60px;
+    right: -40px;
+    background: rgba(200, 255, 46, 0.22);
+  }
+  .orb--cyan {
+    width: 300px;
+    height: 300px;
+    bottom: -40px;
+    left: -60px;
+    background: rgba(62, 198, 224, 0.2);
+  }
+  .orb-ring {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    top: 40px;
+    right: 0;
+    border: 1px dashed rgba(200, 255, 46, 0.25);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .orb-ring {
+      animation: spin 40s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  }
+  .dash {
+    position: relative;
+    padding: var(--space-3);
+    transform-style: preserve-3d;
+    transition: transform 0.35s var(--ease-out);
+    overflow: hidden;
+  }
+  .dash-glare {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      420px circle at var(--mx, 70%) var(--my, 20%),
+      rgba(255, 255, 255, 0.09),
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+  .dash-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid rgba(242, 245, 236, 0.1);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted-dark);
+  }
+  .dash-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-lime-glow);
+  }
+  .dash-url {
+    flex: 1;
+    letter-spacing: 0.06em;
+  }
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(200, 255, 46, 0.12);
+    color: var(--color-accent);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .live-dot {
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+  }
+  .dash-hero-num {
+    padding-block: var(--space-2) var(--space-1);
+  }
+  .dash-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-text-muted-dark);
+    margin-bottom: 4px;
+  }
+  .dash-big {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.02em;
+    color: var(--color-text-inverse);
+  }
+  .spark {
+    width: 100%;
+    height: 110px;
+    margin-top: var(--space-1);
+  }
+  .dash-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 64px;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid rgba(242, 245, 236, 0.1);
+  }
+  .dash-bars span {
+    flex: 1;
+    height: var(--h);
+    border-radius: 4px 4px 2px 2px;
+    background: linear-gradient(180deg, var(--color-accent), rgba(200, 255, 46, 0.25));
+    opacity: 0.85;
+  }
+  .dash-bars span:nth-child(3n) {
+    background: linear-gradient(180deg, var(--color-accent-alt), rgba(62, 198, 224, 0.25));
+  }
+  .dash-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+  }
+  .kpi {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(242, 245, 236, 0.04);
+    border: 1px solid rgba(242, 245, 236, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kpi-num {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: var(--weight-bold);
+    color: var(--color-accent);
+  }
+  .kpi-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted-dark);
+  }
+  .float-chip {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--color-text-inverse);
+    z-index: 2;
+  }
+  .float-chip strong {
+    color: var(--color-accent);
+  }
+  .float-chip svg {
+    color: var(--color-accent);
+  }
+  .chip-a {
+    top: 36px;
+    right: -8px;
+  }
+  .chip-b {
+    bottom: 96px;
+    left: -16px;
+  }
+  .chip-c {
+    bottom: 8px;
+    right: 24px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .float-chip {
+      animation: float 5s ease-in-out infinite;
+    }
+    .chip-b { animation-delay: -1.6s; }
+    .chip-c { animation-delay: -3.2s; }
+    @keyframes float {
+      50% { transform: translateY(-12px); }
+    }
+  }
+  @media (max-width: 639px) {
+    .hero-visual {
+      min-height: 0;
+    }
+    .orb-ring {
+      display: none;
+    }
+    .chip-a {
+      right: 0;
+    }
+    .chip-b {
+      left: 0;
+    }
+    .dash-big {
+      font-size: 44px;
+    }
+  }
+</style>

@@ -1,0 +1,87 @@
+---
+// Central Lucide icon map — every emoji placeholder in the content doc
+// resolves to one of these. Add new icons here, never inline emoji.
+import Smartphone from '@lucide/astro/icons/smartphone';
+import PenTool from '@lucide/astro/icons/pen-tool';
+import Clapperboard from '@lucide/astro/icons/clapperboard';
+import Target from '@lucide/astro/icons/target';
+import Monitor from '@lucide/astro/icons/monitor';
+import Palette from '@lucide/astro/icons/palette';
+import Zap from '@lucide/astro/icons/zap';
+import Lightbulb from '@lucide/astro/icons/lightbulb';
+import Handshake from '@lucide/astro/icons/handshake';
+import TrendingUp from '@lucide/astro/icons/trending-up';
+import Rocket from '@lucide/astro/icons/rocket';
+import Search from '@lucide/astro/icons/search';
+import Map from '@lucide/astro/icons/map';
+import Brain from '@lucide/astro/icons/brain';
+import Wallet from '@lucide/astro/icons/wallet';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import Mail from '@lucide/astro/icons/mail';
+import Phone from '@lucide/astro/icons/phone';
+// NOTE: Lucide v1 removed brand icons (Instagram/Facebook). Those two are
+// rendered below as inline stroke SVGs in the same 24px Feather/Lucide style.
+import Menu from '@lucide/astro/icons/menu';
+import X from '@lucide/astro/icons/x';
+import Check from '@lucide/astro/icons/check';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import Clock from '@lucide/astro/icons/clock';
+import Globe from '@lucide/astro/icons/globe';
+import Users from '@lucide/astro/icons/users';
+import Send from '@lucide/astro/icons/send';
+import MapPin from '@lucide/astro/icons/map-pin';
+import ExternalLink from '@lucide/astro/icons/external-link';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+import Megaphone from '@lucide/astro/icons/megaphone';
+import Code from '@lucide/astro/icons/code';
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Utensils from '@lucide/astro/icons/utensils';
+import Armchair from '@lucide/astro/icons/armchair';
+import Shapes from '@lucide/astro/icons/shapes';
+
+const MAP: Record<string, any> = {
+  smartphone: Smartphone, 'pen-tool': PenTool, clapperboard: Clapperboard,
+  target: Target, monitor: Monitor, palette: Palette, zap: Zap,
+  lightbulb: Lightbulb, handshake: Handshake, 'trending-up': TrendingUp,
+  chart: TrendingUp, rocket: Rocket, search: Search, map: Map, brain: Brain,
+  wallet: Wallet, 'message-circle': MessageCircle, mail: Mail, phone: Phone,
+  menu: Menu, x: X, check: Check,
+  'arrow-right': ArrowRight, 'arrow-up-right': ArrowUpRight, clock: Clock,
+  globe: Globe, users: Users, send: Send, 'map-pin': MapPin,
+  'external-link': ExternalLink, 'chevron-down': ChevronDown,
+  megaphone: Megaphone, code: Code, sparkles: Sparkles, utensils: Utensils,
+  armchair: Armchair, fingerprint: Shapes,
+};
+
+interface Props { name: string; size?: number; }
+const { name, size = 24 } = Astro.props as Props;
+const Tag = MAP[name] ?? Sparkles;
+const isBrand = name === 'instagram' || name === 'facebook';
+---
+{isBrand ? (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    {name === 'instagram' ? (
+      <>
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+      </>
+    ) : (
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    )}
+  </svg>
+) : (
+  <Tag size={size} aria-hidden="true" focusable="false" />
+)}

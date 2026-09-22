@@ -1,0 +1,322 @@
+---
+import Icon from './Icon.astro';
+
+interface Project {
+  slug: string;
+  icon: string;
+  title: string;
+  category: string;
+  card: string;
+  scope: string;
+  result: string;
+  liveUrl?: string;
+}
+interface Props {
+  project: Project;
+  delay?: number;
+}
+const { project, delay = 0 } = Astro.props as Props;
+---
+<article class="card work-card reveal" style={`--reveal-delay: ${delay}ms`} data-category={project.category}>
+  <!-- NOTE: abstract code-crafted mockups stand in for real project
+       screenshots (see NOTES.md). No stock or fake-client imagery. -->
+  <div class="work-visual" aria-hidden="true">
+    <div class="browser">
+      <div class="browser-bar">
+        <span class="bdot"></span><span class="bdot"></span><span class="bdot"></span>
+        <span class="burl">{project.slug}.preview</span>
+      </div>
+      {project.slug === 'social-media-designs' && (
+        <div class="mock-feed">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      )}
+      {project.slug === 'restaurant-online-delivery' && (
+        <div class="mock-menu">
+          <span class="mrow"><i></i><b></b></span>
+          <span class="mrow"><i></i><b></b></span>
+          <span class="mrow"><i></i><b></b></span>
+          <span class="mbtn">Order now</span>
+        </div>
+      )}
+      {project.slug === 'branding-projects' && (
+        <div class="mock-brand">
+          <span class="swatches"><i></i><i></i><i></i><i></i></span>
+          <span class="spectype">Aa</span>
+        </div>
+      )}
+      {project.slug === 'furniture-store-website' && (
+        <div class="mock-shop">
+          <span class="prod"><i></i><b></b></span>
+          <span class="prod"><i></i><b></b></span>
+          <span class="prod"><i></i><b></b></span>
+        </div>
+      )}
+    </div>
+    <span class="pill">{project.category}</span>
+  </div>
+  <div class="work-body">
+    <h3>{project.title}</h3>
+    <p class="muted">{project.card}</p>
+    <dl class="work-meta">
+      <div>
+        <dt>Scope</dt>
+        <dd>{project.scope}</dd>
+      </div>
+      <div>
+        <dt>Result</dt>
+        <dd>{project.result}</dd>
+      </div>
+    </dl>
+    {project.liveUrl && (
+      <a class="card-link" href={project.liveUrl} target="_blank" rel="noopener">
+        View Full Project <Icon name="external-link" size={16} />
+      </a>
+    )}
+  </div>
+</article>
+
+<style>
+  .work-card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .work-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    padding: var(--space-3);
+    background:
+      radial-gradient(420px 220px at 20% 0%, rgba(62, 198, 224, 0.14), transparent 65%),
+      radial-gradient(420px 240px at 85% 110%, rgba(200, 255, 46, 0.16), transparent 65%),
+      var(--color-bg-deep);
+    overflow: hidden;
+  }
+  .work-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200, 255, 46, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 255, 46, 0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse 80% 90% at 50% 50%, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 50%, black 30%, transparent 75%);
+  }
+  .work-card:hover .browser {
+    transform: translateY(-4px) rotateX(4deg);
+  }
+  .browser {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    border-radius: 14px;
+    background: rgba(12, 18, 36, 0.85);
+    border: 1px solid rgba(242, 245, 236, 0.14);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-out);
+    transform: rotateX(0deg);
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(242, 245, 236, 0.1);
+  }
+  .bdot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(242, 245, 236, 0.22);
+  }
+  .bdot:first-child {
+    background: var(--color-accent);
+  }
+  .burl {
+    flex: 1;
+    margin-left: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(242, 245, 236, 0.07);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .work-visual .pill {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: 2;
+  }
+  /* Abstract mock bodies */
+  .mock-feed {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 14px;
+  }
+  .mock-feed span {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: linear-gradient(140deg, rgba(200, 255, 46, 0.35), rgba(62, 198, 224, 0.25));
+  }
+  .mock-feed span:nth-child(2n) {
+    background: linear-gradient(140deg, rgba(139, 124, 255, 0.4), rgba(200, 255, 46, 0.2));
+  }
+  .mock-feed span:nth-child(3n) {
+    background: linear-gradient(140deg, rgba(62, 198, 224, 0.4), rgba(139, 124, 255, 0.25));
+  }
+  .mock-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+  .mrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mrow i {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(140deg, rgba(200, 255, 46, 0.5), rgba(200, 255, 46, 0.15));
+  }
+  .mrow b {
+    flex: 1;
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(242, 245, 236, 0.16);
+  }
+  .mrow:nth-child(2) b { width: 70%; flex: none; }
+  .mrow:nth-child(3) b { width: 55%; flex: none; }
+  .mbtn {
+    margin-top: 2px;
+    text-align: center;
+    padding: 9px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .mock-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 14px;
+  }
+  .swatches {
+    display: flex;
+    gap: 6px;
+  }
+  .swatches i {
+    width: 30px;
+    height: 44px;
+    border-radius: 7px;
+  }
+  .swatches i:nth-child(1) { background: #c8ff2e; }
+  .swatches i:nth-child(2) { background: #3ec6e0; }
+  .swatches i:nth-child(3) { background: #8b7cff; }
+  .swatches i:nth-child(4) { background: rgba(242, 245, 236, 0.85); }
+  .spectype {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: var(--weight-bold);
+    color: var(--color-text-inverse);
+    line-height: 1;
+  }
+  .mock-shop {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 14px;
+  }
+  .prod {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .prod i {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: linear-gradient(160deg, rgba(242, 245, 236, 0.28), rgba(62, 198, 224, 0.18));
+    border: 1px solid rgba(242, 245, 236, 0.1);
+  }
+  .prod b {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(200, 255, 46, 0.4);
+  }
+  .work-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    flex: 1;
+  }
+  .work-body p {
+    font-size: 15px;
+  }
+  .work-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    margin: 0;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+  .section--dark .work-meta,
+  .section--dark-alt .work-meta,
+  .section--deep .work-meta {
+    border-top-color: var(--color-border-dark);
+  }
+  .work-meta dt {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: 4px;
+  }
+  .section--light .work-meta dt,
+  .section--white .work-meta dt {
+    color: var(--color-accent-deep);
+  }
+  .work-meta dd {
+    margin: 0;
+    font-size: 14px;
+  }
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: var(--weight-medium);
+    font-size: 15px;
+    color: var(--color-accent);
+    text-decoration: none;
+    margin-top: auto;
+    padding-top: var(--space-1);
+  }
+  .section--light .card-link,
+  .section--white .card-link {
+    color: var(--color-accent-deep);
+  }
+  .card-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

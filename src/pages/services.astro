@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import Icon from '../components/Icon.astro';
+import services from '../data/services.json';
+---
+<BaseLayout
+  title="Our Services — Social Media, Ads, Web Design & Branding | Madesh Media Lab"
+  description="Explore all 7 core services from Madesh Media Lab: social media management, content creation, video editing, Meta ads, web design, branding, and strategy."
+  path="/services"
+>
+  <section class="page-hero" aria-labelledby="services-heading">
+    <div class="container">
+      <p class="eyebrow reveal">Our Services</p>
+      <h1 id="services-heading" class="reveal" style="--reveal-delay: 80ms">Services built for real growth</h1>
+      <p class="lead reveal" style="--reveal-delay: 160ms">
+        Seven core services covering everything your brand needs to dominate
+        the digital space.
+      </p>
+    </div>
+  </section>
+
+  {services.map((s, i) => (
+    <section
+      id={s.slug}
+      class={`section ${i % 2 === 0 ? 'section--white' : 'section--light'} service-block`}
+      aria-labelledby={`service-${s.slug}`}
+    >
+      <div class="container service-grid">
+        <div class="reveal">
+          <span class="icon-tile icon-tile--lg"><Icon name={s.icon} size={28} /></span>
+          <p class="eyebrow">0{i + 1}</p>
+          <h2 id={`service-${s.slug}`}>{s.title}</h2>
+          <p class="lead muted">{s.description}</p>
+          <a class="btn btn--primary" href={`/contact?service=${s.slug}`}>Get Started</a>
+        </div>
+        <ul class="card service-points reveal" style="--reveal-delay: 100ms">
+          {s.bullets.map((b) => (
+            <li>
+              <span class="check"><Icon name="check" size={18} /></span>
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <CTASection
+    heading="Not sure which service you need?"
+    sub="Book a free consultation and we'll recommend the right mix."
+    buttonLabel="Get Free Consultation"
+    buttonLink="/contact"
+  />
+</BaseLayout>
+
+<style>
+  .service-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-8);
+    align-items: center;
+  }
+  .service-block h2 {
+    margin-bottom: var(--space-2);
+  }
+  .service-block .lead {
+    margin-bottom: var(--space-4);
+  }
+  .icon-tile--lg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-3);
+  }
+  .service-points {
+    list-style: none;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+  }
+  .service-points li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+  }
+  .check {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+  @media (max-width: 1023px) {
+    .service-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

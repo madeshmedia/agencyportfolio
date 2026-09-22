@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import PortfolioCard from '../components/PortfolioCard.astro';
+import portfolio from '../data/portfolio.json';
+
+const categories = ['All', ...new Set(portfolio.map((p) => p.category))];
+---
+<BaseLayout
+  title="Our Work — Portfolio | Madesh Media Lab"
+  description="See branding, web design, and social media projects Madesh Media Lab has delivered for local and international clients."
+  path="/portfolio"
+>
+  <section class="page-hero" aria-labelledby="portfolio-heading">
+    <div class="container">
+      <p class="eyebrow reveal">Portfolio</p>
+      <h1 id="portfolio-heading" class="reveal" style="--reveal-delay: 80ms">Projects that speak for themselves</h1>
+      <p class="lead reveal" style="--reveal-delay: 160ms">
+        A glimpse of the brands and digital products we've helped bring to life.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light" aria-label="Case studies">
+    <div class="container">
+      <!-- NOTE: branded placeholder cards until client supplies real project screenshots (see NOTES.md) -->
+      <div class="filter-row reveal" role="group" aria-label="Filter projects by category" data-filter-row>
+        {categories.map((c, i) => (
+          <button
+            type="button"
+            class={`pill pill-btn ${i === 0 ? 'is-active' : ''}`}
+            data-filter={c}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+      <div class="grid grid-2" data-work-grid>
+        {portfolio.map((p, i) => (
+          <div data-card-category={p.category}>
+            <PortfolioCard project={p} delay={(i % 2) * 70} />
+          </div>
+        ))}
+      </div>
+      <p class="no-results muted" data-no-results hidden>No projects in this category yet — check back soon.</p>
+    </div>
+  </section>
+
+  <CTASection
+    heading="Have a project in mind?"
+    buttonLabel="Discuss Your Project"
+    buttonLink="/contact"
+  />
+</BaseLayout>
+
+<script>
+  const row = document.querySelector('[data-filter-row]');
+  const grid = document.querySelector('[data-work-grid]');
+  const cards = [...document.querySelectorAll('[data-card-category]')];
+  const empty = document.querySelector('[data-no-results]');
+
+  row?.querySelectorAll('[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const active = (btn as HTMLElement).dataset.filter;
+      row.querySelectorAll('[data-filter]').forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      let visible = 0;
+      cards.forEach((card) => {
+        const show =
+          active === 'All' ||
+          (card as HTMLElement).dataset.cardCategory === active;
+        (card as HTMLElement).style.display = show ? '' : 'none';
+        if (show) visible += 1;
+      });
+      if (empty) (empty as HTMLElement).hidden = visible > 0;
+      void grid;
+    });
+  });
+</script>
+
+<style>
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: var(--space-4);
+  }
+  .pill-btn {
+    cursor: pointer;
+    border-color: var(--color-border);
+    background: var(--color-surface-white);
+    color: var(--color-text-primary);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .pill-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .pill-btn.is-active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+  .no-results {
+    margin-top: var(--space-4);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,138 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  jsonLd,
+} = Astro.props as Props;
+
+const site = 'https://madeshmedialab.netlify.app';
+const canonical = `${site}${path === '/' ? '/' : path}`;
+const ogImage = `${site}/assets/images/og-cover.png`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#060913" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Madesh Media Lab" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton />
+
+    <script>
+      // Sticky-header state + scroll fade-up reveals (respects reduced motion)
+      const header = document.querySelector('[data-site-header]');
+      const onScroll = () => {
+        header?.classList.toggle('is-scrolled', window.scrollY > 24);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+      const revealEls = document.querySelectorAll('.reveal');
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        revealEls.forEach((el) => io.observe(el));
+      }
+
+      // Magnetic buttons (fine pointers only, motion-safe)
+      if (finePointer && !reduceMotion) {
+        document.querySelectorAll('[data-magnetic]').forEach((node) => {
+          const el = node as HTMLElement;
+          el.addEventListener('mousemove', (e) => {
+            const r = el.getBoundingClientRect();
+            const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+            const y = ((e.clientY - r.top) / r.height - 0.5) * 12;
+            el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+          });
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+          });
+        });
+      }
+    </script>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: var(--space-2);
+        top: -100px;
+        z-index: 100;
+        background: var(--color-accent);
+        color: var(--color-bg);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius-input);
+        font-weight: var(--weight-medium);
+        text-decoration: none;
+        transition: top 0.2s ease;
+      }
+      .skip-link:focus-visible {
+        top: var(--space-2);
+      }
+    </style>
+  </body>
+</html>

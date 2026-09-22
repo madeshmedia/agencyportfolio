@@ -1,0 +1,306 @@
+---
+import Icon from './Icon.astro';
+
+const NAV = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/team', label: 'Team' },
+  { href: '/process', label: 'Process' },
+  { href: '/faq', label: 'FAQ' },
+];
+
+const normalize = (p: string) => (p.length > 1 && p.endsWith('/') ? p.slice(0, -1) : p);
+const current = normalize(Astro.url.pathname);
+---
+<header class="site-header" data-site-header>
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Madesh Media Lab — home">
+      <img
+        class="brand-mark"
+        src="/assets/logo/logo-icon-white.svg"
+        alt=""
+        width="36"
+        height="34"
+      />
+      <span class="brand-word">
+        <span class="brand-name">MADESH</span>
+        <span class="brand-sub">MEDIA LAB</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Primary">
+      <ul>
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class={current === item.href ? 'is-active' : undefined}
+              aria-current={current === item.href ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn--primary header-cta" href="/contact">Free Consultation</a>
+      <button
+        class="menu-toggle"
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <span class="menu-toggle-icon menu-toggle-icon--open"><Icon name="menu" size={26} /></span>
+        <span class="menu-toggle-icon menu-toggle-icon--close"><Icon name="x" size={26} /></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label="Mobile">
+      <ul>
+        {NAV.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class={current === item.href ? 'is-active' : undefined}
+              aria-current={current === item.href ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li class="mobile-menu-cta">
+          <a class="btn btn--primary" href="/contact">Free Consultation</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const menu = document.querySelector('[data-mobile-menu]');
+
+  const setOpen = (open: boolean) => {
+    header?.classList.toggle('menu-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) {
+      menu?.removeAttribute('hidden');
+      document.body.style.overflow = 'hidden';
+    } else {
+      menu?.setAttribute('hidden', '');
+      document.body.style.overflow = '';
+    }
+  };
+
+  toggle?.addEventListener('click', () => {
+    setOpen(header?.classList.contains('menu-open') !== true);
+  });
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => setOpen(false))
+  );
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    color: var(--color-text-inverse);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    border-bottom: 1px solid transparent;
+  }
+  /* Solid navy fallback for no backdrop-filter support; glass effect where available */
+  .site-header.is-scrolled {
+    background-color: var(--color-bg);
+    border-bottom-color: var(--color-border-dark);
+  }
+  @supports (backdrop-filter: blur(12px)) {
+    .site-header.is-scrolled {
+      background-color: rgba(11, 19, 43, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 76px;
+    padding-block: var(--space-1);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+  .brand-mark {
+    width: 36px;
+    height: 34px;
+  }
+  .brand-word {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: 17px;
+    letter-spacing: 0.06em;
+  }
+  .brand-sub {
+    font-size: 10px;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.32em;
+    color: var(--color-text-muted-dark);
+  }
+  .desktop-nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+  }
+  .desktop-nav a {
+    position: relative;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: var(--weight-medium);
+    color: var(--color-text-inverse);
+    opacity: 0.82;
+    padding-block: var(--space-1);
+    transition: opacity 0.2s ease;
+  }
+  .desktop-nav a:hover {
+    opacity: 1;
+  }
+  .desktop-nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .desktop-nav a:hover::after,
+  .desktop-nav a.is-active::after {
+    transform: scaleX(1);
+  }
+  .desktop-nav a.is-active {
+    opacity: 1;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .header-cta {
+    min-height: 44px;
+    padding: 10px 22px;
+    font-size: 15px;
+  }
+  .menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-input);
+    color: var(--color-text-inverse);
+    cursor: pointer;
+  }
+  .menu-toggle-icon--close {
+    display: none;
+  }
+  .menu-open .menu-toggle-icon--open {
+    display: none;
+  }
+  .menu-open .menu-toggle-icon--close {
+    display: inline-flex;
+  }
+  .mobile-menu {
+    position: fixed;
+    inset: 76px 0 0 0;
+    background: var(--color-bg);
+    padding: var(--space-4) var(--gutter-mobile) var(--space-6);
+    overflow-y: auto;
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  .mobile-menu ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .mobile-menu a:not(.btn) {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+    color: var(--color-text-inverse);
+    border-bottom: 1px solid var(--color-border-dark);
+  }
+  .mobile-menu a.is-active:not(.btn) {
+    color: var(--color-accent);
+  }
+  .mobile-menu-cta {
+    padding-top: var(--space-3);
+  }
+  .mobile-menu-cta .btn {
+    width: 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-menu li {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: menu-in 0.4s var(--ease-out) forwards;
+    }
+    .mobile-menu li:nth-child(2) { animation-delay: 60ms; }
+    .mobile-menu li:nth-child(3) { animation-delay: 120ms; }
+    .mobile-menu li:nth-child(4) { animation-delay: 180ms; }
+    .mobile-menu li:nth-child(5) { animation-delay: 240ms; }
+    .mobile-menu li:nth-child(6) { animation-delay: 300ms; }
+    .mobile-menu li:nth-child(7) { animation-delay: 360ms; }
+    .mobile-menu li:nth-child(8) { animation-delay: 420ms; }
+    @keyframes menu-in {
+      to { opacity: 1; transform: none; }
+    }
+  }
+  @media (max-width: 1023px) {
+    .desktop-nav,
+    .header-cta {
+      display: none;
+    }
+    .menu-toggle {
+      display: inline-flex;
+    }
+  }
+</style>

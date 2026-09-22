@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import TeamCard from '../components/TeamCard.astro';
+import team from '../data/team.json';
+
+// NOTE: client has not supplied real names/photos yet — role-based cards with
+// consistent branded avatar tiles (see NOTES.md). Never mix with stock photos.
+const founders = team.filter((m) => m.group === 'founders');
+const crew = team.filter((m) => m.group === 'team');
+---
+<BaseLayout
+  title="Meet the Team | Madesh Media Lab"
+  description="Meet the founders and creative team behind Madesh Media Lab."
+  path="/team"
+>
+  <section class="page-hero" aria-labelledby="team-heading">
+    <div class="container">
+      <p class="eyebrow reveal">Our Team</p>
+      <h1 id="team-heading" class="reveal" style="--reveal-delay: 80ms">The founders</h1>
+      <p class="lead reveal" style="--reveal-delay: 160ms">
+        Young entrepreneurs passionate about technology, business, and digital
+        growth — leading Madesh Media Lab from vision to reality.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--white" aria-labelledby="founders-heading">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Founders</p>
+        <h2 id="founders-heading">Leading from the front</h2>
+      </div>
+      <div class="grid grid-2">
+        {founders.map((m, i) => (
+          <TeamCard member={m} delay={i * 70} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--light" aria-labelledby="crew-heading">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">The Wider Team</p>
+        <h2 id="crew-heading">Designers &amp; editors</h2>
+      </div>
+      <div class="grid grid-3">
+        {crew.map((m, i) => (
+          <TeamCard member={m} delay={(i % 3) * 70} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    heading="Want to work with our team?"
+    buttonLabel="Get Free Consultation"
+    buttonLink="/contact"
+  />
+</BaseLayout>

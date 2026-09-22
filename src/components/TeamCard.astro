@@ -1,0 +1,59 @@
+---
+import Icon from './Icon.astro';
+
+interface Member {
+  role: string;
+  bio: string;
+  icon: string;
+  tags: string[];
+}
+interface Props {
+  member: Member;
+  delay?: number;
+}
+const { member, delay = 0 } = Astro.props as Props;
+---
+<article class="card team-card reveal" style={`--reveal-delay: ${delay}ms`}>
+  <span class="team-avatar" aria-hidden="true"><Icon name={member.icon} size={36} /></span>
+  <h3>{member.role}</h3>
+  <p class="muted">{member.bio}</p>
+  <ul class="tag-row" aria-label="Specialties">
+    {member.tags.map((t) => (
+      <li class="pill">{t}</li>
+    ))}
+  </ul>
+</article>
+
+<style>
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    text-align: left;
+  }
+  .team-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(212, 162, 78, 0.28), transparent 60%),
+      var(--color-accent-soft);
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-accent);
+  }
+  .team-card p {
+    font-size: 15px;
+    flex: 1;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+  }
+</style>

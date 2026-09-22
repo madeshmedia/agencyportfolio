@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" role="img" aria-label="Madesh Media Lab full logo (white)">
+  <!-- White / inverted lockup for dark (#0B132B) sections.
+       Mark is a simplified vector redraw; exact designer trace flagged in NOTES.md.
+       Wordmark set in Sora/Inter fallback stack so it matches site type. -->
+  <g fill="#F5F6FA">
+    <path d="M250 268 V82 c0-17 19-26 32-17 l73 52 c9 7 9 21 0 28 l-54 39 v84 c0 12-9 21-25 21 -16 0-26-9-26-21 z"/>
+    <path d="M510 76 V262 c0 17-19 26-32 17 l-73-52 c-9-7-9-21 0-28 l54-39 V76 c0-12 9-21 25-21 16 0 26 9 26 21 z"/>
+    <rect x="336" y="164" width="34" height="92" rx="7"/>
+    <rect x="378" y="136" width="34" height="120" rx="7"/>
+    <rect x="420" y="108" width="34" height="148" rx="7"/>
+  </g>
+  <path d="M215 236 C 325 285, 460 220, 530 110 C 460 200, 350 262, 215 236 Z" fill="#F5F6FA"/>
+  <circle cx="540" cy="88" r="15" fill="none" stroke="#F5F6FA" stroke-width="12"/>
+  <circle cx="498" cy="106" r="10" fill="none" stroke="#F5F6FA" stroke-width="10"/>
+  <g fill="#F5F6FA" font-family="Sora, Inter, -apple-system, 'Segoe UI', sans-serif" text-anchor="middle">
+    <text x="380" y="368" font-size="84" font-weight="700" letter-spacing="4">MADESH</text>
+    <text x="380" y="428" font-size="44" font-weight="600" letter-spacing="14">MEDIA LAB</text>
+    <text x="380" y="464" font-size="19" font-weight="500" letter-spacing="6" fill="#9AA3C0">DIGITAL MARKETING AGENCY</text>
+  </g>
+  <rect x="150" y="482" width="120" height="5" fill="#D4A24E"/>
+  <rect x="490" y="482" width="120" height="5" fill="#D4A24E"/>
+</svg>

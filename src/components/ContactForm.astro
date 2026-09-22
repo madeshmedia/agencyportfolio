@@ -1,0 +1,261 @@
+---
+import Icon from './Icon.astro';
+import services from '../data/services.json';
+
+const SERVICE_OPTIONS = [
+  ...services.map((s) => ({ value: s.slug, label: s.title })),
+  { value: 'not-sure', label: 'Not sure yet' },
+];
+---
+<form
+  class="contact-form card"
+  name="contact"
+  method="POST"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  data-contact-form
+  novalidate
+>
+  <input type="hidden" name="form-name" value="contact" />
+  <p class="honeypot" aria-hidden="true">
+    <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="cf-name">Full Name</label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required aria-describedby="cf-name-error" />
+      <p class="field-error" id="cf-name-error" hidden>Please enter your full name.</p>
+    </div>
+    <div class="field">
+      <label for="cf-email">Email</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required aria-describedby="cf-email-error" />
+      <p class="field-error" id="cf-email-error" hidden>Please enter a valid email address.</p>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="cf-phone">Phone <span class="optional">(optional)</span></label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="cf-phone-error" />
+      <p class="field-error" id="cf-phone-error" hidden>Please enter a valid phone number.</p>
+    </div>
+    <div class="field">
+      <label for="cf-service">Service Needed</label>
+      <select id="cf-service" name="service" required data-service-select aria-describedby="cf-service-error">
+        <option value="" disabled selected>Select a service…</option>
+        {SERVICE_OPTIONS.map((o) => (
+          <option value={o.value}>{o.label}</option>
+        ))}
+      </select>
+      <p class="field-error" id="cf-service-error" hidden>Please choose a service.</p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="cf-message">Message</label>
+    <textarea id="cf-message" name="message" rows="5" required aria-describedby="cf-message-error"></textarea>
+    <p class="field-error" id="cf-message-error" hidden>Please tell us a little about your project.</p>
+  </div>
+
+  <div class="form-foot">
+    <button class="btn btn--primary" type="submit" data-submit-btn>
+      <span data-submit-label>Send Message</span>
+    </button>
+    <p class="form-note muted">We reply with a custom plan within 24 hours.</p>
+  </div>
+
+  <div class="form-success" data-form-success hidden role="status">
+    <span class="icon-tile"><Icon name="check" size={24} /></span>
+    <h3>Message sent — thank you!</h3>
+    <p class="muted">We'll get back to you within 24 hours. Need a faster reply? <a href="https://wa.me/9779804831080" target="_blank" rel="noopener">Chat on WhatsApp</a>.</p>
+  </div>
+  <p class="field-error" data-form-error hidden role="alert">Something went wrong sending your message. Please try again or reach us on WhatsApp at +977 9804831080.</p>
+</form>
+
+<script>
+  const form = document.querySelector('[data-contact-form]') as HTMLFormElement | null;
+  const serviceSelect = document.querySelector('[data-service-select]') as HTMLSelectElement | null;
+
+  // Deep-link support: /contact?service=web-design pre-selects the dropdown
+  if (serviceSelect) {
+    const requested = new URLSearchParams(window.location.search).get('service');
+    if (requested && [...serviceSelect.options].some((o) => o.value === requested)) {
+      serviceSelect.value = requested;
+    }
+  }
+
+  const setError = (input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement, show: boolean) => {
+    input.setAttribute('aria-invalid', String(show));
+    const err = document.getElementById(`${input.id}-error`);
+    if (err) err.hidden = !show;
+  };
+
+  const validateField = (input: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement): boolean => {
+    let ok = true;
+    const value = input.value.trim();
+    if (input.id === 'cf-email') {
+      ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    } else if (input.id === 'cf-phone') {
+      ok = value === '' || /^[+()\-.\s\d]{6,20}$/.test(value);
+    } else {
+      ok = value.length > 0;
+    }
+    setError(input, !ok);
+    return ok;
+  };
+
+  form?.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach((el) => {
+    const input = el as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+    if (input.name === 'bot-field') return;
+    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('input', () => {
+      if (input.getAttribute('aria-invalid') === 'true') validateField(input);
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    const fields = [...form.querySelectorAll('input:not([type="hidden"]), select, textarea')]
+      .filter((el) => (el as HTMLInputElement).name !== 'bot-field') as (HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement)[];
+    const allOk = fields.map(validateField).every(Boolean);
+    if (!allOk) {
+      e.preventDefault();
+      (form.querySelector('[aria-invalid="true"]') as HTMLElement | null)?.focus();
+      return;
+    }
+    // Smooth in-place success state; plain POST fallback still works with JS disabled
+    e.preventDefault();
+    const btn = form.querySelector('[data-submit-btn]') as HTMLButtonElement | null;
+    const label = form.querySelector('[data-submit-label]');
+    const formError = form.querySelector('[data-form-error]');
+    if (formError) formError.hidden = true;
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Sending…';
+    try {
+      const data = new FormData(form);
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+      });
+      form.querySelectorAll('.field, .field-row, .form-foot').forEach((el) => ((el as HTMLElement).style.display = 'none'));
+      const success = form.querySelector('[data-form-success]');
+      if (success) success.hidden = false;
+    } catch {
+      if (formError) formError.hidden = false;
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = 'Send Message';
+    }
+  });
+</script>
+
+<style>
+  .contact-form {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    margin: 0;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .field label {
+    font-size: 14px;
+    font-weight: var(--weight-medium);
+  }
+  .optional {
+    color: var(--color-text-muted);
+    font-weight: var(--weight-regular);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font: inherit;
+    font-size: 15px;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    padding: 12px 14px;
+    width: 100%;
+  }
+  .section--dark .field input,
+  .section--dark-alt .field input,
+  .section--dark .field select,
+  .section--dark-alt .field select,
+  .section--dark .field textarea,
+  .section--dark-alt .field textarea {
+    border-color: var(--color-border-dark);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 128px;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-glow);
+  }
+  .field input[aria-invalid="true"],
+  .field select[aria-invalid="true"],
+  .field textarea[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  .field-error {
+    font-size: 13px;
+    color: var(--color-error);
+    margin: 0;
+  }
+  .form-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .form-note {
+    font-size: 14px;
+    margin: 0;
+  }
+  .form-success {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius-card);
+  }
+  .form-success[hidden] {
+    display: none;
+  }
+  .form-success h3 {
+    margin: 0;
+  }
+  .form-success p {
+    margin: 0;
+  }
+  @media (max-width: 639px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .contact-form {
+      padding: var(--space-3);
+    }
+  }
+</style>

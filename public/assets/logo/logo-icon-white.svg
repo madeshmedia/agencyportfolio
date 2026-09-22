@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" role="img" aria-label="Madesh Media Lab logo mark (white)">
+  <!-- White / inverted version of the supplied "M" mark for dark (#0B132B) sections.
+       Simplified vector redraw; exact designer trace flagged in NOTES.md. -->
+  <g fill="#F5F6FA">
+    <path d="M40 500 V118 c0-22 25-34 42-22 l96 68 c12 9 12 28 0 37 l-71 51 v248 c0 16-12 28-33 28 -20 0-34-12-34-28 z"/>
+    <path d="M600 112 V488 c0 22-25 34-42 22 l-96-68 c-12-9-12-28 0-37 l71-51 V106 c0-16 12-28 33-28 20 0 34 12 34 28 z"/>
+    <rect x="232" y="292" width="52" height="140" rx="10"/>
+    <rect x="298" y="248" width="52" height="184" rx="10"/>
+    <rect x="364" y="204" width="52" height="228" rx="10"/>
+  </g>
+  <path d="M84 444 C 230 510, 420 410, 540 210 C 440 380, 280 480, 84 444 Z" fill="#F5F6FA"/>
+  <circle cx="556" cy="168" r="26" fill="none" stroke="#F5F6FA" stroke-width="20"/>
+  <circle cx="492" cy="196" r="18" fill="none" stroke="#F5F6FA" stroke-width="16"/>
+</svg>

@@ -1,0 +1,188 @@
+---
+import Icon from './Icon.astro';
+import services from '../data/services.json';
+
+const QUICK_LINKS = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img
+          src="/assets/logo/logo-full-white.svg"
+          alt="Madesh Media Lab — Digital Marketing Agency"
+          width="180"
+          height="133"
+          loading="lazy"
+        />
+        <p class="footer-tagline">
+          From Vision to Digital Reality. We help local and international
+          businesses build a strong online presence and achieve measurable growth.
+        </p>
+        <a class="btn btn--primary" href="/contact">Get Started</a>
+      </div>
+
+      <nav class="footer-col" aria-label="Quick links">
+        <h3>Quick Links</h3>
+        <ul>
+          {QUICK_LINKS.map((l) => (
+            <li><a href={l.href}>{l.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="footer-col" aria-label="Services">
+        <h3>Services</h3>
+        <ul>
+          {services.map((s) => (
+            <li><a href={`/services#${s.slug}`}>{s.title}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul class="contact-list">
+          <li>
+            <a href="tel:+9779804831080">
+              <Icon name="phone" size={18} /> +977 9804831080
+            </a>
+          </li>
+          <li>
+            <a href="mailto:madeshmedialab@gmail.com">
+              <Icon name="mail" size={18} /> madeshmedialab@gmail.com
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/9779804831080" target="_blank" rel="noopener">
+              <Icon name="message-circle" size={18} /> WhatsApp
+            </a>
+          </li>
+        </ul>
+        <div class="social-row">
+          <a
+            href="https://www.instagram.com/madesh_media_lab"
+            target="_blank"
+            rel="noopener"
+            aria-label="Madesh Media Lab on Instagram"
+          >
+            <Icon name="instagram" size={20} />
+          </a>
+          <a
+            href="https://www.facebook.com/share/1DvmvuGkbj/"
+            target="_blank"
+            rel="noopener"
+            aria-label="Madesh Media Lab on Facebook"
+          >
+            <Icon name="facebook" size={20} />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p>© {year} Madesh Media Lab. All rights reserved. Crafted with passion for digital growth.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-bg);
+    color: var(--color-text-inverse);
+    border-top: 1px solid var(--color-border-dark);
+    padding-block: var(--space-8) var(--space-3);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: var(--space-6);
+  }
+  .footer-brand img {
+    width: 180px;
+    height: auto;
+    margin-bottom: var(--space-2);
+  }
+  .footer-tagline {
+    color: var(--color-text-muted-dark);
+    font-size: 15px;
+    margin-bottom: var(--space-3);
+    max-width: 34ch;
+  }
+  .footer-col h3 {
+    font-size: 15px;
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-col a:not(.btn) {
+    color: var(--color-text-muted-dark);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s ease;
+  }
+  .footer-col a:not(.btn):hover {
+    color: var(--color-accent);
+  }
+  .contact-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    overflow-wrap: anywhere;
+  }
+  .social-row {
+    display: flex;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+  }
+  .social-row a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-input);
+    color: var(--color-text-inverse);
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+  .social-row a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+  }
+  .footer-legal {
+    margin-top: var(--space-6);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-dark);
+    color: var(--color-text-muted-dark);
+    font-size: 14px;
+  }
+  @media (max-width: 1023px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 639px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

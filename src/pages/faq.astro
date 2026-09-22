@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTASection from '../components/CTASection.astro';
+import FAQItem from '../components/FAQItem.astro';
+import faq from '../data/faq.json';
+---
+<BaseLayout
+  title="Frequently Asked Questions | Madesh Media Lab"
+  description="Answers to common questions about pricing, timelines, and how Madesh Media Lab works with local and international clients."
+  path="/faq"
+>
+  <section class="page-hero" aria-labelledby="faq-heading">
+    <div class="container">
+      <p class="eyebrow reveal">FAQ</p>
+      <h1 id="faq-heading" class="reveal" style="--reveal-delay: 80ms">Questions? We've got answers</h1>
+      <p class="lead reveal" style="--reveal-delay: 160ms">
+        Everything you need to know before we start working together.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light" aria-label="Frequently asked questions">
+    <div class="container narrow">
+      <div class="faq-list">
+        {faq.map((item, i) => (
+          <FAQItem q={item.q} a={item.a} open={i === 0} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection
+    heading="Still have questions?"
+    buttonLabel="Talk to Us"
+    buttonLink="/contact"
+  />
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 800px;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+</style>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Madesh Media Lab favicon">
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="#060913"/>
+  <!-- Simplified "M" monogram in off-white -->
+  <path d="M128 372 V148 c0-14 16-22 27-14 l62 44 c8 6 8 18 0 24 l-46 33 v137 c0 10-8 18-21 18 -12 0-22-8-22-18 z" fill="#F2F5EC"/>
+  <path d="M384 140 v224 c0 14-16 22-27 14 l-62-44 c-8-6-8-18 0-24 l46-33 V140 c0-10 8-18 21-18 12 0 22 8 22 18 z" fill="#F2F5EC"/>
+  <!-- Growth bars -->
+  <rect x="212" y="238" width="26" height="72" rx="6" fill="#F2F5EC"/>
+  <rect x="246" y="212" width="26" height="98" rx="6" fill="#F2F5EC"/>
+  <rect x="280" y="186" width="26" height="124" rx="6" fill="#F2F5EC"/>
+  <!-- Lime swoosh accent -->
+  <path d="M150 320 C 230 360, 320 300, 380 190 C 330 290, 240 340, 150 320 Z" fill="#C8FF2E"/>
+  <circle cx="378" cy="158" r="16" fill="none" stroke="#C8FF2E" stroke-width="12"/>
+</svg>

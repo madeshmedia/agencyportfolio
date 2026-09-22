@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+---
+<a
+  class="whatsapp-fab"
+  href="https://wa.me/9779804831080"
+  target="_blank"
+  rel="noopener"
+  aria-label="Chat with Madesh Media Lab on WhatsApp"
+>
+  <Icon name="message-circle" size={26} />
+</a>
+
+<style>
+  .whatsapp-fab {
+    position: fixed;
+    right: var(--space-3);
+    bottom: var(--space-3);
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    box-shadow: 0 12px 32px var(--color-card-shadow);
+    transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  }
+  .whatsapp-fab:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(212, 162, 78, 0.35);
+  }
+</style>

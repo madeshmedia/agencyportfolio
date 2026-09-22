@@ -1,0 +1,104 @@
+/* ============================================================
+   Madesh Media Lab — Design Tokens (v2 "Tech Lab" rebrand)
+   Single source of truth. NEVER hardcode a color, font, spacing,
+   or radius value outside this file — always reference the variable.
+
+   Direction: near-black lab canvas + electric lime signal + cyan
+   depth glow, warm-paper light sections. Clash Display headlines,
+   Instrument Sans body, JetBrains Mono tech labels.
+   (Deviates from 03-DESIGN-SYSTEM.md per client redesign request —
+   see NOTES.md "Rebrand log".)
+   ============================================================ */
+
+:root {
+  /* ---- Color palette: deep lab canvas, lime signal ---- */
+  --color-bg: #060913;               /* primary dark background */
+  --color-bg-alt: #0c1224;           /* secondary dark surface (cards on dark) */
+  --color-bg-deep: #03050c;          /* deepest layer (hero base, footer) */
+  --color-surface-light: #f2f1e9;    /* warm paper section background */
+  --color-surface-white: #ffffff;    /* card bg on light sections */
+  --color-text-primary: #0a0f1e;     /* body text on light */
+  --color-text-inverse: #f2f5ec;     /* body text on dark */
+  --color-text-muted: #5b6478;       /* secondary text on light */
+  --color-text-muted-dark: #9aa3b8;  /* secondary text on dark */
+  --color-accent: #c8ff2e;           /* electric lime — CTAs, highlights */
+  --color-accent-ink: #060913;       /* text on top of lime */
+  --color-accent-deep: #4e6b00;      /* dark lime — icon strokes on light bg */
+  --color-accent-alt: #3ec6e0;       /* cyan — depth glows, data lines only */
+  --color-accent-violet: #8b7cff;    /* violet — third mesh stop, sparing */
+  --color-border: #e2e1d5;           /* hairline border on light */
+  --color-border-dark: #1d2742;      /* hairline border on dark */
+  --color-success: #3fae64;
+  --color-error: #e4574c;
+
+  /* Derived tints (same hues, transparent fills only) */
+  --color-accent-soft: rgba(200, 255, 46, 0.1);   /* icon tile bg on dark */
+  --color-accent-soft-light: rgba(101, 140, 0, 0.12); /* icon tile bg on light */
+  --color-accent-glow: rgba(200, 255, 46, 0.16);  /* form focus glow */
+  --color-card-shadow: rgba(3, 5, 12, 0.16);      /* card hover shadow */
+  --color-lime-glow: rgba(200, 255, 46, 0.28);
+  --color-cyan-glow: rgba(62, 198, 224, 0.22);
+
+  /* ---- Typography ---- */
+  --font-display: "Clash Display", "Sora", "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", sans-serif;
+  --font-body: "Instrument Sans", "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, sfmono-regular, menlo, monospace;
+
+  --text-h1-desktop: clamp(48px, 7.2vw, 96px);
+  --text-h1-mobile: 40px;
+  --text-h2-desktop: clamp(32px, 4.4vw, 56px);
+  --text-h2-mobile: 30px;
+  --text-h3-desktop: 24px;
+  --text-h3-mobile: 20px;
+  --text-body-lg-desktop: 18px;
+  --text-body-lg-mobile: 16px;
+  --text-body-desktop: 16px;
+  --text-body-mobile: 15px;
+  --text-label-desktop: 13px;
+  --text-label-mobile: 12px;
+
+  --leading-tight: 1.02;   /* H1 */
+  --leading-snug: 1.06;    /* H2 */
+  --leading-card: 1.3;     /* H3 */
+  --leading-body: 1.6;     /* body */
+  --leading-label: 1.4;    /* label */
+  --tracking-label: 0.08em;
+
+  --weight-bold: 600;      /* Clash Display runs small — 600 reads as bold */
+  --weight-semibold: 500;  /* H3 */
+  --weight-regular: 400;   /* body */
+  --weight-medium: 500;    /* labels/buttons */
+
+  /* ---- Spacing & layout (8px base unit) ---- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  --section-pad-desktop: 112px;
+  --section-pad-mobile: 64px;
+  --container-max: 1240px;
+  --gutter-mobile: 20px;
+  --gutter-desktop: 48px;
+
+  --radius-card: 20px;
+  --radius-input: 12px;
+  --radius-pill: 999px;
+
+  --btn-pad-y: 15px;
+  --btn-pad-x: 30px;
+
+  /* ---- Responsive breakpoints ---- */
+  --bp-tablet: 640px;
+  --bp-desktop: 1024px;
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.44, 1);
+  --duration-fade: 0.6s;
+  --stagger-step: 80ms;
+}

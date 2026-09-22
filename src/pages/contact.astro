@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout
+  title="Contact Us — Free Consultation | Madesh Media Lab"
+  description="Get in touch with Madesh Media Lab for a free consultation and custom digital growth plan."
+  path="/contact"
+>
+  <section class="page-hero" aria-labelledby="contact-heading">
+    <div class="container">
+      <p class="eyebrow reveal">Contact</p>
+      <h1 id="contact-heading" class="reveal" style="--reveal-delay: 80ms">Let's build your digital growth</h1>
+      <p class="lead reveal" style="--reveal-delay: 160ms">
+        Tell us about your business and we'll reply with a custom plan within
+        24 hours.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--light" aria-label="Contact form and direct contact options">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <ContactForm />
+      </div>
+      <aside class="card direct-panel reveal" style="--reveal-delay: 100ms" aria-label="Direct contact options">
+        <h2>Prefer to reach us directly?</h2>
+        <ul>
+          <li>
+            <a href="https://wa.me/9779804831080" target="_blank" rel="noopener">
+              <span class="icon-tile"><Icon name="message-circle" size={24} /></span>
+              <span>
+                <strong>Chat on WhatsApp</strong>
+                <span class="muted">+977 9804831080</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:madeshmedialab@gmail.com">
+              <span class="icon-tile"><Icon name="mail" size={24} /></span>
+              <span>
+                <strong>Email Us</strong>
+                <span class="muted">madeshmedialab@gmail.com</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <div class="social-block">
+          <p class="muted">Follow along</p>
+          <div class="social-row">
+            <a
+              href="https://www.instagram.com/madesh_media_lab"
+              target="_blank"
+              rel="noopener"
+              aria-label="Madesh Media Lab on Instagram"
+            >
+              <Icon name="instagram" size={20} />
+            </a>
+            <a
+              href="https://www.facebook.com/share/1DvmvuGkbj/"
+              target="_blank"
+              rel="noopener"
+              aria-label="Madesh Media Lab on Facebook"
+            >
+              <Icon name="facebook" size={20} />
+            </a>
+          </div>
+        </div>
+        <p class="location muted">
+          <Icon name="map-pin" size={16} /> Nepal — serving local &amp; international clients
+        </p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .direct-panel {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .direct-panel h2 {
+    font-size: var(--text-h3-desktop);
+  }
+  .direct-panel ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .direct-panel ul a {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    text-decoration: none;
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), border-color 0.2s ease;
+  }
+  .direct-panel ul a:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px var(--color-card-shadow);
+    border-color: var(--color-accent);
+  }
+  .direct-panel ul a > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-wrap: anywhere;
+  }
+  .social-block p {
+    margin: 0 0 8px;
+    font-size: 14px;
+  }
+  .social-row {
+    display: flex;
+    gap: var(--space-1);
+  }
+  .social-row a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    color: inherit;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+  .social-row a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+  }
+  .location {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    margin: 0;
+  }
+  @media (max-width: 1023px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
