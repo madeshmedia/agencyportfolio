@@ -13,14 +13,40 @@ interface Props {
 }
 const { service, delay = 0 } = Astro.props as Props;
 ---
-<article class="card service-card reveal" style={`--reveal-delay: ${delay}ms`}>
+<article class="card service-card reveal" style={`--reveal-delay: ${delay}ms`} data-tilt-card="7">
   <span class="icon-tile"><Icon name={service.icon} size={24} /></span>
   <h3>{service.title}</h3>
   <p class="muted">{service.description}</p>
   <a class="card-link" href={`/services#${service.slug}`}>
-    Learn more <Icon name="arrow-right" size={16} />
+    Learn more <span class="visually-hidden">about {service.title}</span> <Icon name="arrow-right" size={16} />
   </a>
 </article>
+
+<script>
+  // 3D pointer tilt for cards (fine pointers + motion-safe only).
+  // Guarded by [data-tilt-ready] so repeated component instances never
+  // double-bind the same card.
+  (() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-tilt-card]:not([data-tilt-ready])').forEach((node) => {
+      const el = node as HTMLElement;
+      const max = Number(el.dataset.tiltCard || '6');
+      el.dataset.tiltReady = 'true';
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transition = 'transform 0.06s linear';
+        el.style.transform = `perspective(900px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-4px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        el.style.transform = '';
+      });
+    });
+  })();
+</script>
 
 <style>
   .service-card {
@@ -28,6 +54,39 @@ const { service, delay = 0 } = Astro.props as Props;
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-4);
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--space-4);
+    right: var(--space-4);
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .service-card:hover::before {
+    transform: scaleX(1);
+  }
+  .service-card:hover {
+    border-color: var(--color-accent);
+  }
+  .service-card:hover .icon-tile {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    transform: rotate(-6deg) scale(1.06);
+  }
+  .service-card .icon-tile {
+    transition:
+      transform 0.3s var(--ease-spring),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease;
   }
   .service-card p {
     font-size: 15px;
@@ -46,6 +105,12 @@ const { service, delay = 0 } = Astro.props as Props;
   .card-link:hover {
     text-decoration: underline;
     text-underline-offset: 4px;
+  }
+  .card-link svg {
+    transition: transform 0.25s var(--ease-out);
+  }
+  .card-link:hover svg {
+    transform: translateX(5px);
   }
   :global(.section--light) .card-link,
   :global(.section--white) .card-link {

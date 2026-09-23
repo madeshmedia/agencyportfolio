@@ -39,8 +39,22 @@ svg {
   max-width: 100%;
 }
 
+img {
+  height: auto;
+}
+
 a {
   color: inherit;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Anchored sections clear the fixed header */
+section[id] {
+  scroll-margin-top: 84px;
 }
 
 ::selection {
@@ -64,6 +78,19 @@ body::after {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: var(--radius-input);
+}
+
+/* Screen-reader-only text (kept in link content for descriptive names) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---- Type scale ---- */
@@ -238,6 +265,26 @@ p.lead {
   background-color: var(--color-accent);
   color: var(--color-accent-ink);
   border-color: var(--color-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Light sweep across primary buttons on hover */
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -70%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.btn--primary:hover::after {
+  left: 135%;
 }
 
 .btn--primary:hover {
@@ -295,6 +342,12 @@ p.lead {
     0 20px 48px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(200, 255, 46, 0.12),
     0 0 42px rgba(200, 255, 46, 0.08);
+}
+
+/* 3D tilt stage (JS-enhanced: fine pointers + motion-safe only) */
+[data-tilt-card] {
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .section--dark-alt .card {
@@ -542,6 +595,11 @@ p.lead {
 @media (max-width: 639px) {
   body {
     font-size: var(--text-body-mobile);
+  }
+
+  /* Full-width tap-friendly CTAs on phones */
+  .hero-ctas .btn {
+    flex: 1 1 100%;
   }
 
   h1 {

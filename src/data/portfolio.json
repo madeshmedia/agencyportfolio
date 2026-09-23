@@ -1,1 +1,65 @@
-[{"card":"A full suite of branded social media creatives — post templates, stories, and campaign visuals that drive engagement.","category":"Social Media","detail":"We built a complete social media design system for the brand — a cohesive set of post templates, story frames, and campaign creatives that kept their feed consistent and instantly recognizable.","icon":"palette","result":"Higher engagement & brand recall","scope":"Content design system","slug":"social-media-designs","title":"Social Media Designs"},{"card":"A modern web app for a restaurant with live menu browsing, cart, and seamless online ordering — built to convert hungry visitors.","category":"Web App","detail":"A full ordering experience — live menu, cart, checkout, and order tracking — designed to turn hungry visitors into paying customers on any device.","icon":"utensils","result":"Faster orders, more revenue","scope":"Web app & ordering flow","slug":"restaurant-online-delivery","title":"Restaurant Online Delivery"},{"card":"Complete visual identities — logos, palettes, and guidelines — giving emerging brands a premium, consistent look.","category":"Branding","detail":"We crafted complete visual identities — logo systems, color palettes, typography, and brand guidelines — that gave these emerging brands a premium, trustworthy look across every touchpoint.","icon":"fingerprint","result":"Consistent, recognizable brand","scope":"Brand identity & guidelines","slug":"branding-projects","title":"Branding Projects"},{"card":"An elegant furniture website with product catalog, filtering, and ordering — making it effortless for customers to buy.","category":"E-commerce","detail":"An elegant furniture storefront with a rich product catalog, smart filtering, and a smooth ordering flow — making it effortless for customers to browse and buy.","icon":"armchair","liveUrl":"https://furniture-showcase--rabikishanshah6.replit.app","result":"More orders, better UX","scope":"E-commerce website","slug":"furniture-store-website","title":"Furniture Store Website"}]
+[
+  {
+    "slug": "gaming-cafe-lounge",
+    "icon": "gamepad-2",
+    "title": "Gaming Cafe Lounge",
+    "category": "Website",
+    "card": "A high-energy demo website for a gaming lounge � zone showcases, session pricing, tournaments, membership and online session booking.",
+    "detail": "A complete concept site for a Kathmandu gaming lounge: PC arena, PS5 lounge and sim-racing zones, transparent session pricing, weekly tournaments, membership tiers and a session booking flow with live station status.",
+    "scope": "Demo website & booking flow",
+    "result": "Live demo � explore the full site",
+    "liveUrl": "https://gaming-cafe-demo.vercel.app/"
+  },
+  {
+    "slug": "directres-hotel-booking",
+    "icon": "hotel",
+    "title": "Himalayan Haven � Direct Booking Demo",
+    "category": "Web App",
+    "card": "A direct-booking hotel website demo � room categories, booking widget, experiences, dining and local payment options.",
+    "detail": "A concept direct-booking experience for a Pokhara lakeside hotel: room categories with demo pricing, a booking availability widget, experiences and dining pages, and checkout via eSewa, Khalti, UPI or card.",
+    "scope": "Demo website & booking flow",
+    "result": "Live demo � explore the full site",
+    "liveUrl": "https://directres-omega.vercel.app/"
+  },
+  {
+    "card": "A full suite of branded social media creatives — post templates, stories, and campaign visuals that drive engagement.",
+    "category": "Social Media",
+    "detail": "We built a complete social media design system for the brand — a cohesive set of post templates, story frames, and campaign creatives that kept their feed consistent and instantly recognizable.",
+    "icon": "palette",
+    "result": "Higher engagement & brand recall",
+    "scope": "Content design system",
+    "slug": "social-media-designs",
+    "title": "Social Media Designs"
+  },
+  {
+    "card": "A modern web app for a restaurant with live menu browsing, cart, and seamless online ordering — built to convert hungry visitors.",
+    "category": "Web App",
+    "detail": "A full ordering experience — live menu, cart, checkout, and order tracking — designed to turn hungry visitors into paying customers on any device.",
+    "icon": "utensils",
+    "result": "Faster orders, more revenue",
+    "scope": "Web app & ordering flow",
+    "slug": "restaurant-online-delivery",
+    "title": "Restaurant Online Delivery"
+  },
+  {
+    "card": "Complete visual identities — logos, palettes, and guidelines — giving emerging brands a premium, consistent look.",
+    "category": "Branding",
+    "detail": "We crafted complete visual identities — logo systems, color palettes, typography, and brand guidelines — that gave these emerging brands a premium, trustworthy look across every touchpoint.",
+    "icon": "fingerprint",
+    "result": "Consistent, recognizable brand",
+    "scope": "Brand identity & guidelines",
+    "slug": "branding-projects",
+    "title": "Branding Projects"
+  },
+  {
+    "card": "An elegant furniture website with product catalog, filtering, and ordering — making it effortless for customers to buy.",
+    "category": "E-commerce",
+    "detail": "An elegant furniture storefront with a rich product catalog, smart filtering, and a smooth ordering flow — making it effortless for customers to browse and buy.",
+    "icon": "armchair",
+    "liveUrl": "https://furniture-showcase--rabikishanshah6.replit.app",
+    "result": "More orders, better UX",
+    "scope": "E-commerce website",
+    "slug": "furniture-store-website",
+    "title": "Furniture Store Website"
+  }
+]

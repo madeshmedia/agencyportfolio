@@ -1,0 +1,243 @@
+---
+import Icon from './Icon.astro';
+import services from '../data/services.json';
+
+// NOTE: publishable URL + anon key are public by design (they ship in the
+// client bundle). Reads are blocked by Row Level Security — the table only
+// allows anonymous INSERTs. Never put a service_role key here.
+const SUPABASE_URL = 'https://bzxxtgeucvbqeuzoniow.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_J5rZ79LyCN1DJ5snbXTeDA_zkbrHHUw';
+
+const SERVICE_OPTIONS = [
+  ...services.map((s) => ({ value: s.slug, label: s.title })),
+  { value: 'not-sure', label: 'Not sure yet' },
+];
+---
+<form class="contact-form card" data-message-form novalidate>
+  <div class="field-row">
+    <div class="field">
+      <label for="mf-name">Full Name</label>
+      <input id="mf-name" name="name" type="text" autocomplete="name" required aria-describedby="mf-name-error" />
+      <p class="field-error" id="mf-name-error" hidden>Please enter your full name.</p>
+    </div>
+    <div class="field">
+      <label for="mf-email">Email</label>
+      <input id="mf-email" name="email" type="email" autocomplete="email" required aria-describedby="mf-email-error" />
+      <p class="field-error" id="mf-email-error" hidden>Please enter a valid email address.</p>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="mf-phone">Phone <span class="optional">(optional)</span></label>
+      <input id="mf-phone" name="phone" type="tel" autocomplete="tel" aria-describedby="mf-phone-error" />
+      <p class="field-error" id="mf-phone-error" hidden>Please enter a valid phone number.</p>
+    </div>
+    <div class="field">
+      <label for="mf-service">Service Needed <span class="optional">(optional)</span></label>
+      <select id="mf-service" name="service" aria-describedby="mf-service-error">
+        <option value="" selected>Select a service…</option>
+        {SERVICE_OPTIONS.map((o) => (
+          <option value={o.value}>{o.label}</option>
+        ))}
+      </select>
+      <p class="field-error" id="mf-service-error" hidden>Please choose a service.</p>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="mf-message">Message</label>
+    <textarea id="mf-message" name="message" rows="4" required aria-describedby="mf-message-error"></textarea>
+    <p class="field-error" id="mf-message-error" hidden>Please tell us a little about your project.</p>
+  </div>
+
+  <div class="form-foot">
+    <button class="btn btn--primary" type="submit" data-submit-btn>
+      <span data-submit-label>Send Message</span>
+    </button>
+    <p class="form-note muted">Saved securely — we reply with a custom plan.</p>
+  </div>
+
+  <div class="form-success" data-form-success hidden role="status">
+    <span class="icon-tile"><Icon name="check" size={24} /></span>
+    <h3>Message sent — thank you!</h3>
+    <p class="muted">We'll get back to you soon. Need a faster reply? <a href="https://wa.me/9779804831080" target="_blank" rel="noopener">Chat on WhatsApp</a>.</p>
+  </div>
+  <p class="field-error" data-form-error hidden role="alert">Something went wrong sending your message. Please try again or reach us on WhatsApp at +977 9804831080.</p>
+</form>
+
+<script define:vars={{ url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY }}>
+  const form = document.querySelector('[data-message-form]');
+
+  const setError = (input, show) => {
+    input.setAttribute('aria-invalid', String(show));
+    const err = document.getElementById(`${input.id}-error`);
+    if (err) err.hidden = !show;
+  };
+
+  const validateField = (input) => {
+    let ok = true;
+    const value = input.value.trim();
+    if (input.id === 'mf-email') {
+      ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    } else if (input.id === 'mf-phone') {
+      ok = value === '' || /^[+()\-.\s\d]{6,20}$/.test(value);
+    } else if (input.id === 'mf-service') {
+      ok = true; // optional
+    } else {
+      ok = value.length > 0;
+    }
+    setError(input, !ok);
+    return ok;
+  };
+
+  form?.querySelectorAll('input, select, textarea').forEach((el) => {
+    const input = el;
+    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('input', () => {
+      if (input.getAttribute('aria-invalid') === 'true') validateField(input);
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fields = [...form.querySelectorAll('input, select, textarea')];
+    const allOk = fields.map(validateField).every(Boolean);
+    if (!allOk) {
+      form.querySelector('[aria-invalid="true"]')?.focus();
+      return;
+    }
+    const btn = form.querySelector('[data-submit-btn]');
+    const label = form.querySelector('[data-submit-label]');
+    const formError = form.querySelector('[data-form-error]');
+    if (formError) formError.hidden = true;
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'Sending…';
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get('name') || '').trim(),
+      email: String(data.get('email') || '').trim(),
+      phone: String(data.get('phone') || '').trim() || null,
+      service: String(data.get('service') || '').trim() || null,
+      message: String(data.get('message') || '').trim(),
+      source: 'homepage',
+    };
+    try {
+      const res = await fetch(`${url}/rest/v1/contact_messages`, {
+        method: 'POST',
+        headers: {
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`Supabase responded ${res.status}`);
+      form.querySelectorAll('.field, .field-row, .form-foot').forEach((el) => (el.style.display = 'none'));
+      const success = form.querySelector('[data-form-success]');
+      if (success) success.hidden = false;
+    } catch {
+      if (formError) formError.hidden = false;
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = 'Send Message';
+    }
+  });
+</script>
+
+<style>
+  /* Form panel styling mirrors ContactForm (same Tech Lab card system) */
+  .contact-form {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .field label {
+    font-size: 14px;
+    font-weight: var(--weight-medium);
+  }
+  .optional {
+    color: var(--color-text-muted);
+    font-weight: var(--weight-regular);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    font: inherit;
+    font-size: 16px; /* 16px+ prevents iOS auto-zoom on focus */
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-input);
+    padding: 12px 14px;
+    width: 100%;
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 112px;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-glow);
+  }
+  .field input[aria-invalid="true"],
+  .field select[aria-invalid="true"],
+  .field textarea[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  .field-error {
+    font-size: 13px;
+    color: var(--color-error);
+    margin: 0;
+  }
+  .form-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+  .form-note {
+    font-size: 14px;
+    margin: 0;
+  }
+  .form-success {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius-card);
+  }
+  .form-success[hidden] {
+    display: none;
+  }
+  .form-success h3 {
+    margin: 0;
+  }
+  .form-success p {
+    margin: 0;
+  }
+  @media (max-width: 639px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .contact-form {
+      padding: var(--space-3);
+    }
+  }
+</style>

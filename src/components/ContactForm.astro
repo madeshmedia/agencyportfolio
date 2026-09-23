@@ -2,6 +2,11 @@
 import Icon from './Icon.astro';
 import services from '../data/services.json';
 
+// Supabase inbox (same table as the homepage message form). Publishable
+// key only — reads are blocked by RLS; messages are read in the dashboard.
+const SUPABASE_URL = 'https://bzxxtgeucvbqeuzoniow.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_J5rZ79LyCN1DJ5snbXTeDA_zkbrHHUw';
+
 const SERVICE_OPTIONS = [
   ...services.map((s) => ({ value: s.slug, label: s.title })),
   { value: 'not-sure', label: 'Not sure yet' },
@@ -10,13 +15,9 @@ const SERVICE_OPTIONS = [
 <form
   class="contact-form card"
   name="contact"
-  method="POST"
-  data-netlify="true"
-  netlify-honeypot="bot-field"
   data-contact-form
   novalidate
 >
-  <input type="hidden" name="form-name" value="contact" />
   <p class="honeypot" aria-hidden="true">
     <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
   </p>
@@ -73,7 +74,7 @@ const SERVICE_OPTIONS = [
   <p class="field-error" data-form-error hidden role="alert">Something went wrong sending your message. Please try again or reach us on WhatsApp at +977 9804831080.</p>
 </form>
 
-<script>
+<script define:vars={{ url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY }}>
   const form = document.querySelector('[data-contact-form]') as HTMLFormElement | null;
   const serviceSelect = document.querySelector('[data-service-select]') as HTMLSelectElement | null;
 
@@ -123,7 +124,7 @@ const SERVICE_OPTIONS = [
       (form.querySelector('[aria-invalid="true"]') as HTMLElement | null)?.focus();
       return;
     }
-    // Smooth in-place success state; plain POST fallback still works with JS disabled
+    // Smooth in-place success state (Supabase backend — works on any host)
     e.preventDefault();
     const btn = form.querySelector('[data-submit-btn]') as HTMLButtonElement | null;
     const label = form.querySelector('[data-submit-label]');
@@ -132,12 +133,29 @@ const SERVICE_OPTIONS = [
     if (btn) btn.disabled = true;
     if (label) label.textContent = 'Sending…';
     try {
-      const data = new FormData(form);
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
-      });
+      const botFill = (form.querySelector('[name="bot-field"]') as HTMLInputElement | null)?.value;
+      if (!botFill) {
+        const data = new FormData(form);
+        const trim = (k: string) => String(data.get(k) || '').trim();
+        const res = await fetch(`${url}/rest/v1/contact_messages`, {
+          method: 'POST',
+          headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${anonKey}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+          body: JSON.stringify({
+            name: trim('name'),
+            email: trim('email'),
+            phone: trim('phone') || null,
+            service: trim('service') || null,
+            message: trim('message'),
+            source: 'contact',
+          }),
+        });
+        if (!res.ok) throw new Error(`Supabase responded ${res.status}`);
+      }
       form.querySelectorAll('.field, .field-row, .form-foot').forEach((el) => ((el as HTMLElement).style.display = 'none'));
       const success = form.querySelector('[data-form-success]');
       if (success) success.hidden = false;
@@ -185,7 +203,7 @@ const SERVICE_OPTIONS = [
   .field select,
   .field textarea {
     font: inherit;
-    font-size: 15px;
+    font-size: 16px; /* 16px+ prevents iOS auto-zoom on focus */
     color: inherit;
     background: transparent;
     border: 1px solid var(--color-border);

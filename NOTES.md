@@ -34,19 +34,39 @@ as "too common / AI-generated", so the visual system was re-art-directed
    24h Reply** (`src/pages/index.astro`, marked with a code comment). Replace
    with real numbers (e.g. "12+ Projects Delivered", "100% Client Focus") or
    keep the grounded version.
-2. **Portfolio screenshots (4):** Social Media Designs, Restaurant Online
-   Delivery, Branding Projects, Furniture Store Website. Pages currently use
-   branded gradient placeholder cards (`PortfolioCard.astro` `.work-visual`).
-   Do NOT substitute stock photography that implies a fake client.
-3. **Team names + headshots (5):** two co-founders, web designer, two editors.
-   Pages currently use role titles with consistent branded avatar tiles
-   (`TeamCard.astro`). Supply real names + same-crop photos (or one
-   illustrated-avatar set) — never mix photos and monograms on one page.
-4. **Contact form handler:** the form (`ContactForm.astro`) is wired for
-   **Netlify Forms** (`data-netlify="true"` + honeypot + `form-name`). It only
-   delivers on a Netlify-hosted deploy — **test one real submission in a
-   deploy preview** (with JS on and off). If hosting moves off Netlify, swap
-   to Formspree and update the `fetch('/')` endpoint.
+2. **Portfolio entries (6):** the first two cards link to **real client demo
+   sites** — Gaming Cafe Lounge (`https://gaming-cafe-demo.vercel.app/`) and
+   Himalayan Haven direct-booking demo (`https://directres-omega.vercel.app/`),
+   both with `liveUrl` in `portfolio.json` and honest "Live demo" outcomes
+   (no invented metrics). The remaining four cards still use branded gradient
+   placeholder visuals (`PortfolioCard.astro` `.work-visual`). Do NOT
+   substitute stock photography that implies a fake client, and do NOT invent
+   live URLs for entries that have none.
+3. **Team names + headshots:** DONE for the two co-founders — Mumtaj Rain
+   (Founder & Social Media Manager, `public/assets/images/team/mamta.jpeg`)
+   and Rabi Kishan Sah (Technical Partner & Web Developer,
+   `public/assets/images/team/rabi.png`), wired via `name` + `photo` fields
+   in `team.json` and rendered by `TeamCard.astro` (photo with hover zoom,
+   icon-avatar fallback). Still needed: names/photos for the web designer
+   and two editors — never mix photos and monograms on one page, so those
+   three keep avatar tiles until their photos arrive.
+4. **Contact form handler:** the `/contact` form (`ContactForm.astro`) posts to
+   the **Supabase** `contact_messages` table (`source: 'contact'`) with a
+   client-side honeypot (`bot-field`) as a spam trap — this works on any host,
+   including the live Vercel deploy. (The old Netlify Forms wiring was removed
+   when hosting moved to Vercel; there is no `netlify.toml` anymore, deploy
+   config lives in `vercel.json`.)
+5. **Homepage message form → Supabase:** the "Tell us about your project"
+   section at the end of `src/pages/index.astro` (`MessageForm.astro`)
+   writes to the same table (`source: 'homepage'`).
+   writes to Supabase project `agencyportfolio`
+   (`https://bzxxtgeucvbqeuzoniow.supabase.co`, table `contact_messages`:
+   name, email, phone?, service?, message, created_at). Security: RLS is ON
+   with an INSERT-only policy and no SELECT policy, so the publishable key
+   in the client bundle can submit but never list messages — **read new
+   messages in the Supabase dashboard → Table Editor**. Verified end-to-end
+   with a live POST (201) plus an anonymous-read check (empty), test row
+   removed. Never commit a `service_role` key here.
 5. **Logo vector masters:** supplied PNGs are black-on-grey-gradient (not
    transparent). White PNGs were keyed to transparent
    (`logo-icon-white.png`, `logo-full-white.png`) and simplified white SVGs
@@ -79,6 +99,6 @@ as "too common / AI-generated", so the visual system was re-art-directed
 - [x] `robots.txt` present; sitemap URL referenced
 - [x] WhatsApp (`https://wa.me/9779804831080`) + `mailto:` links site-wide
 - [x] Contact validation + `?service=` deep-link pre-fill (try `/contact?service=web-design`)
-- [ ] Real form submission test on Netlify deploy preview (cannot pass locally)
+- [ ] Real form submission test on the Vercel deploy (both forms write to Supabase — check Table Editor)
 - [ ] Lighthouse 90+/95+/95+/100 pass on deploy preview (all pages)
 - [ ] 375 / 768 / 1280 / 1440px click-through of all 8 pages, mobile + desktop

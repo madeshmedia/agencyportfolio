@@ -3,6 +3,6 @@ import sitemap from '@astrojs/sitemap';
 
 // https://docs.astro.build/en/guides/configuring-astro/
 export default defineConfig({
-  site: 'https://madeshmedialab.netlify.app',
+  site: 'https://madeshmedialab.vercel.app',
   integrations: [sitemap()],
 });

@@ -17,9 +17,10 @@ interface Props {
 }
 const { project, delay = 0 } = Astro.props as Props;
 ---
-<article class="card work-card reveal" style={`--reveal-delay: ${delay}ms`} data-category={project.category}>
+<article class="card work-card reveal" style={`--reveal-delay: ${delay}ms`} data-category={project.category} data-tilt-card="5">
   <!-- NOTE: abstract code-crafted mockups stand in for real project
-       screenshots (see NOTES.md). No stock or fake-client imagery. -->
+       screenshots (see NOTES.md). No stock imagery, no invented metrics —
+       entries with a live link point to real demo sites. -->
   <div class="work-visual" aria-hidden="true">
     <div class="browser">
       <div class="browser-bar">
@@ -52,6 +53,23 @@ const { project, delay = 0 } = Astro.props as Props;
           <span class="prod"><i></i><b></b></span>
         </div>
       )}
+      {project.slug === 'gaming-cafe-lounge' && (
+        <div class="mock-arena">
+          <span class="arena-head">ENTER THE ARENA</span>
+          <span class="station"><i></i><b></b><em class="on">BOOK</em></span>
+          <span class="station"><i></i><b></b><em>BOOK</em></span>
+          <span class="station"><i></i><b></b><em>BOOK</em></span>
+        </div>
+      )}
+      {project.slug === 'directres-hotel-booking' && (
+        <div class="mock-stay">
+          <span class="stay-title">Where the Himalayas meet the lake</span>
+          <span class="stay-widget">
+            <i>Check-in</i><i>Check-out</i><i>Guests</i>
+          </span>
+          <span class="mbtn">Check availability</span>
+        </div>
+      )}
     </div>
     <span class="pill">{project.category}</span>
   </div>
@@ -70,7 +88,7 @@ const { project, delay = 0 } = Astro.props as Props;
     </dl>
     {project.liveUrl && (
       <a class="card-link" href={project.liveUrl} target="_blank" rel="noopener">
-        View Full Project <Icon name="external-link" size={16} />
+        View Full Project <span class="visually-hidden">: {project.title}</span> <Icon name="external-link" size={16} />
       </a>
     )}
   </div>
@@ -81,6 +99,25 @@ const { project, delay = 0 } = Astro.props as Props;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: relative;
+  }
+  .work-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .work-card:hover::after {
+    transform: scaleX(1);
+  }
+  .work-card:hover {
+    border-color: var(--color-accent);
   }
   .work-visual {
     position: relative;
@@ -107,7 +144,7 @@ const { project, delay = 0 } = Astro.props as Props;
     -webkit-mask-image: radial-gradient(ellipse 80% 90% at 50% 50%, black 30%, transparent 75%);
   }
   .work-card:hover .browser {
-    transform: translateY(-4px) rotateX(4deg);
+    transform: translateY(-6px) rotateX(3deg) scale(1.02);
   }
   .browser {
     position: relative;
@@ -319,4 +356,115 @@ const { project, delay = 0 } = Astro.props as Props;
     text-decoration: underline;
     text-underline-offset: 4px;
   }
+  .card-link svg {
+    transition: transform 0.25s var(--ease-out);
+  }
+  .card-link:hover svg {
+    transform: translate(2px, -2px);
+  }
+  /* Demo study bodies: abstract UI, no metrics, no fake data */
+  .mock-arena {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
+  .arena-head {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: var(--color-text-inverse);
+  }
+  .station {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .station i {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: linear-gradient(140deg, rgba(139, 124, 255, 0.5), rgba(62, 198, 224, 0.25));
+    border: 1px solid rgba(242, 245, 236, 0.14);
+  }
+  .station b {
+    flex: 1;
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(242, 245, 236, 0.16);
+  }
+  .station em {
+    font-style: normal;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(242, 245, 236, 0.25);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted-dark);
+  }
+  .station em.on {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+  .mock-stay {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 14px;
+  }
+  .stay-title {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: 21px;
+    line-height: 1.2;
+    color: var(--color-text-inverse);
+  }
+  .stay-widget {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .stay-widget i {
+    font-style: normal;
+    padding: 10px 8px;
+    border-radius: 8px;
+    background: rgba(242, 245, 236, 0.06);
+    border: 1px solid rgba(242, 245, 236, 0.14);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted-dark);
+    text-align: center;
+  }
 </style>
+
+<script>
+  // 3D pointer tilt for cards (fine pointers + motion-safe only).
+  // Guarded by [data-tilt-ready] so repeated component instances never
+  // double-bind the same card.
+  (() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-tilt-card]:not([data-tilt-ready])').forEach((node) => {
+      const el = node as HTMLElement;
+      const max = Number(el.dataset.tiltCard || '6');
+      el.dataset.tiltReady = 'true';
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transition = 'transform 0.06s linear';
+        el.style.transform = `perspective(900px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-4px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        el.style.transform = '';
+      });
+    });
+  })();
+</script>

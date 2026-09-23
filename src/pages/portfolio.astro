@@ -23,7 +23,9 @@ const categories = ['All', ...new Set(portfolio.map((p) => p.category))];
 
   <section class="section section--light" aria-label="Case studies">
     <div class="container">
-      <!-- NOTE: branded placeholder cards until client supplies real project screenshots (see NOTES.md) -->
+      <!-- NOTE: two entries link to real client demo sites; the remaining
+           cards use branded abstract studies until more links/screenshots
+           arrive (see NOTES.md). No fake URLs, no invented metrics. -->
       <div class="filter-row reveal" role="group" aria-label="Filter projects by category" data-filter-row>
         {categories.map((c, i) => (
           <button

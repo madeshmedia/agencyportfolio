@@ -16,13 +16,20 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img
-          src="/assets/logo/logo-full-white.svg"
-          alt="Madesh Media Lab — Digital Marketing Agency"
-          width="180"
-          height="133"
-          loading="lazy"
-        />
+        <a class="brand" href="/" aria-label="Madesh Media Lab — home">
+          <img
+            class="brand-mark"
+            src="/assets/logo/logo-icon-white.svg"
+            alt=""
+            width="40"
+            height="38"
+            loading="lazy"
+          />
+          <span class="brand-word">
+            <span class="brand-name">MADESH</span>
+            <span class="brand-sub">MEDIA LAB</span>
+          </span>
+        </a>
         <p class="footer-tagline">
           From Vision to Digital Reality. We help local and international
           businesses build a strong online presence and achieve measurable growth.
@@ -106,10 +113,34 @@ const year = new Date().getFullYear();
     grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
     gap: var(--space-6);
   }
-  .footer-brand img {
-    width: 180px;
-    height: auto;
+  /* Same logo lockup as the header: icon mark + wordmark */
+  .footer-brand .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    text-decoration: none;
     margin-bottom: var(--space-2);
+  }
+  .footer-brand .brand-mark {
+    width: 40px;
+    height: 38px;
+  }
+  .footer-brand .brand-word {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .footer-brand .brand-name {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
+    font-size: 19px;
+    letter-spacing: 0.06em;
+  }
+  .footer-brand .brand-sub {
+    font-size: 10px;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.32em;
+    color: var(--color-text-muted-dark);
   }
   .footer-tagline {
     color: var(--color-text-muted-dark);

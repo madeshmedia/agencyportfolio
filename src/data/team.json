@@ -1,1 +1,58 @@
-[{"bio":"Leads brand strategy and social direction, making sure every client's voice lands with the right audience. The vision behind Madesh Media Lab.","group":"founders","icon":"megaphone","role":"Co-Founder — Founder & Social Media Manager","tags":["Social Strategy","Content","Branding"]},{"bio":"Builds fast, reliable websites and web apps engineered for performance. Turns ideas into production-ready digital products that scale.","group":"founders","icon":"code","role":"Co-Founder — Technical Partner & Web Developer","tags":["Web Development","SEO","UX"]},{"bio":"Crafts clean, modern interfaces and brand visuals that look as good as they convert.","group":"team","icon":"palette","role":"Web Designer — UI / Visual Design","tags":["UI Design","Brand Visuals"]},{"bio":"Edits scroll-stopping reels and videos optimized for reach and retention.","group":"team","icon":"clapperboard","role":"Editor — Video & Reels","tags":["Reels","Retention"]},{"bio":"Brings stories to life with sharp edits, motion graphics, and engaging content.","group":"team","icon":"sparkles","role":"Editor — Content & Motion","tags":["Motion Graphics","Content"]}]
+[
+  {
+    "bio": "Leads brand strategy and social direction, making sure every client's voice lands with the right audience. The vision behind Madesh Media Lab.",
+    "group": "founders",
+    "icon": "megaphone",
+    "role": "Co-Founder — Founder & Social Media Manager",
+    "tags": [
+      "Social Strategy",
+      "Content",
+      "Branding"
+    ],
+    "name": "Mumtaj Rain",
+    "photo": "/assets/images/team/mamta.jpeg"
+  },
+  {
+    "bio": "Builds fast, reliable websites and web apps engineered for performance. Turns ideas into production-ready digital products that scale.",
+    "group": "founders",
+    "icon": "code",
+    "role": "Co-Founder — Technical Partner & Web Developer",
+    "tags": [
+      "Web Development",
+      "SEO",
+      "UX"
+    ],
+    "name": "Rabi Kishan Sah",
+    "photo": "/assets/images/team/rabi.png"
+  },
+  {
+    "bio": "Crafts clean, modern interfaces and brand visuals that look as good as they convert.",
+    "group": "team",
+    "icon": "palette",
+    "role": "Web Designer — UI / Visual Design",
+    "tags": [
+      "UI Design",
+      "Brand Visuals"
+    ]
+  },
+  {
+    "bio": "Edits scroll-stopping reels and videos optimized for reach and retention.",
+    "group": "team",
+    "icon": "clapperboard",
+    "role": "Editor — Video & Reels",
+    "tags": [
+      "Reels",
+      "Retention"
+    ]
+  },
+  {
+    "bio": "Brings stories to life with sharp edits, motion graphics, and engaging content.",
+    "group": "team",
+    "icon": "sparkles",
+    "role": "Editor — Content & Motion",
+    "tags": [
+      "Motion Graphics",
+      "Content"
+    ]
+  }
+]
