@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
